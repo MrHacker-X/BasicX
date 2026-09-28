@@ -1,0 +1,21 @@
+# Python (basicx.py is retired, but keep caches ignored)
+__pycache__/
+*.py[cod]
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Agent metadata
+.freebuff/
