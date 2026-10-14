@@ -4,6 +4,19 @@
 
 set -u
 
+# VritraSec remote alert control
+_VR_RC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_vr_remote_startup() {
+    PYTHONPATH="$_VR_RC_DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -c \
+        "from modules.remote_control import RemoteControl; RemoteControl('basicx', interactive=True).startup()" \
+        2>/dev/null || true
+}
+_vr_remote_exit() {
+    PYTHONPATH="$_VR_RC_DIR${PYTHONPATH:+:$PYTHONPATH}" python3 -c \
+        "from modules.remote_control import RemoteControl; RemoteControl('basicx', interactive=True).exit()" \
+        2>/dev/null || true
+}
+
 # ---------- colors ----------
 if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
     RD=$'\e[31m'; GR=$'\e[32m'; YL=$'\e[33m'; CY=$'\e[36m'; BW=$'\e[1m'; DM=$'\e[2m'; XX=$'\e[0m'
@@ -37,6 +50,8 @@ printf '%s\n' "${YL}          first-time ${BW}Termux${XX}${YL} setup · ${BW}MrH
 echo
 
 # ---------- interactive menu ----------
+_vr_remote_startup
+trap '_vr_remote_exit' EXIT
 ESSENTIALS="git curl wget unzip zip tar unrar nano vim openssh openssl-tool termux-api termux-services python python-pip nodejs-lts"
 DEV="clang make binutils pkg-config golang rust openjdk-21"
 POWER="neovim micro tmux zsh fish htop fastfetch bat eza ripgrep fd jq tree ncurses-utils"
